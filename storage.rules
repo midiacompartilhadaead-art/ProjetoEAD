@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// Regras de Segurança do Firebase Storage
+// Estrutura: documentos_recebidos/
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Regra para pasta documentos_recebidos (envio público)
+    match /documentos_recebidos/{allPaths=**} {
+      // Qualquer visitante público pode fazer upload de novos arquivos
+      allow create: if true;
+      allow write: if true;
+      
+      // Apenas Administradores autenticados podem ler, listar e excluir arquivos
+      allow read, get, list, delete: if request.auth != null && (
+        request.auth.token.email == 'midiacompartilhada.ead@unimar.br' || 
+        request.auth.token.email == 'admin@unimar.br' || 
+        request.auth.token.email == 'marcelolindoamorim@gmail.com'
+      );
+    }
+
+    // Regra para pasta documentos (retrocompatibilidade)
+    match /documentos/{allPaths=**} {
+      allow create: if true;
+      allow write: if true;
+      allow read, get, list, delete: if request.auth != null && (
+        request.auth.token.email == 'midiacompartilhada.ead@unimar.br' || 
+        request.auth.token.email == 'admin@unimar.br' || 
+        request.auth.token.email == 'marcelolindoamorim@gmail.com'
+      );
+    }
+  }
+}

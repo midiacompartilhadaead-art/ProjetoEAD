@@ -1,0 +1,6 @@
+{
+  "name": "Unimar EAD - Mídia Compartilhada",
+  "description": "Aplicativo SPA para gestão de Mídia Compartilhada Unimar EAD com módulo de Treinamento, Calculadora de Verba e Envio de Documentos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
