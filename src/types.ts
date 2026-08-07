@@ -1,22 +1,35 @@
+/**
+ * Identificadores das páginas da aplicação (Navegação SPA)
+ */
 export type PageView = 'home' | 'training' | 'upload' | 'admin';
 
-export interface AdminDocument {
+/**
+ * Interface para controle de metas de captação por polo
+ */
+export interface MetaPolo {
   id: string;
-  userEmail: string;
-  name: string;
-  fullPath: string;
-  size: number;
-  timeCreated: string;
-  contentType?: string;
-  downloadUrl?: string;
+  polo: string;
+  metaModulo: number;
+  realizado: number;
 }
 
+/**
+ * Mapeamento de metas organizadas por período de referência
+ */
+export type MetasPorPeriodo = Record<string, MetaPolo[]>;
+
+/**
+ * Opção de polo cadastrado na instituição
+ */
 export interface PoloOption {
   id: string;
   nome: string;
   uf?: string;
 }
 
+/**
+ * Regra de reembolso de itens de mídia compartilhada
+ */
 export interface ReembolsoItem {
   item: string;
   categoria: string;
@@ -24,6 +37,26 @@ export interface ReembolsoItem {
   observacoes: string;
 }
 
+/**
+ * Estrutura individual de um item de despesa adicionado ao lote
+ */
+export interface ItemDespesa {
+  id: string;
+  categoria: string;
+  descricao: string;
+  valor: number;
+  arquivosNomes: string[];
+  arquivosCount: number;
+}
+
+/**
+ * Status possíveis do processo de auditoria do comprovante
+ */
+export type StatusAuditoria = 'Aprovado / Feito' | 'Aguardando / Em Análise' | 'Errado / Com Pendência' | 'Pendente Auditoria';
+
+/**
+ * Estrutura completa de uma submissão de prestação de contas enviada pelo polo
+ */
 export interface SubmissaoComprovante {
   id: string;
   protocolo: string;
@@ -34,10 +67,16 @@ export interface SubmissaoComprovante {
   arquivosCount: number;
   arquivosNomes: string[];
   observacoes?: string;
-  status: 'Pendente Auditoria' | 'Aprovado' | 'Em Análise';
+  observacaoInterna?: string;
+  valorTotal?: number;
+  itensDespesa?: ItemDespesa[];
+  status: StatusAuditoria;
 }
 
-export interface FirebaseStorageFile {
+/**
+ * Estrutura para controle de arquivos no armazenamento em nuvem (OneDrive/SharePoint)
+ */
+export interface StorageFile {
   id: string;
   name: string;
   fullPath: string;
@@ -48,3 +87,4 @@ export interface FirebaseStorageFile {
   downloadUrl?: string;
   error?: string;
 }
+

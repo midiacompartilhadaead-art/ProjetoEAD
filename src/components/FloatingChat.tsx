@@ -6,7 +6,6 @@ import {
   Sparkles, 
   Loader2, 
   MessageSquare, 
-  HelpCircle, 
   ChevronDown, 
   RefreshCw,
   CheckCircle2,
@@ -20,15 +19,12 @@ interface Message {
   timestamp: string;
 }
 
-const QUICK_QUESTIONS = [
-  'Qual a regra da verba 50/50 e o teto limite?',
-  'Como calcular a verba com minha meta de alunos?',
-  'Quais notas fiscais são aceitas para reembolso?',
-  'Quais são os itens vedados que não posso enviar?',
-  'Qual o prazo de envio e e-mail da auditoria?'
-];
-
 export const FloatingChat: React.FC = () => {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isAdminRoute = pathname.startsWith('/admin');
+
+  if (isAdminRoute) return null;
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -68,6 +64,32 @@ export const FloatingChat: React.FC = () => {
     if (!textToSend) setInput('');
     setLoading(true);
 
+    const lower = queryText.toLowerCase();
+    const isHumanContactIntent = 
+      lower.includes('atendente') || 
+      lower.includes('humano') || 
+      lower.includes('falar conosco') || 
+      lower.includes('falar com alguem') || 
+      lower.includes('falar com alguém') || 
+      lower.includes('falar com um atendente') || 
+      lower.includes('suporte humano') || 
+      lower.includes('contato humano') || 
+      lower.includes('falar direto');
+
+    if (isHumanContactIntent) {
+      setTimeout(() => {
+        const assistantMessage: Message = {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          text: 'Para falar diretamente conosco, você pode clicar no botão do WhatsApp localizado no balão no canto esquerdo da tela, ou ligar/enviar mensagem no número (14) 99812-4403.',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+        setLoading(false);
+      }, 300);
+      return;
+    }
+
     try {
       // Build conversation history for API
       const apiMessages = messages
@@ -105,7 +127,7 @@ export const FloatingChat: React.FC = () => {
       const errorMessage: Message = {
         id: `err-${Date.now()}`,
         role: 'assistant',
-        text: `⚠️ **Ops!** Tive um problema ao consultar a base do treinamento (${err.message || 'Erro no servidor'}). Por favor, tente novamente em instantes.`,
+        text: `⚠️ **Ops!** Tive um problema ao consultar a base do guia de mídia (${err.message || 'Erro no servidor'}). Por favor, tente novamente em instantes.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -157,7 +179,7 @@ export const FloatingChat: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       
       {/* Floating Chat Modal Panel */}
       {isOpen && (
@@ -265,23 +287,6 @@ export const FloatingChat: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Suggestions Chips */}
-          <div className="px-3 py-2 bg-white border-t border-[#dce5ee] flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-            <span className="text-[10px] font-black text-[#0074b8] uppercase tracking-wider whitespace-nowrap flex items-center gap-1 px-1">
-              <HelpCircle className="w-3 h-3 text-[#00a9e8]" /> Sugestões:
-            </span>
-            {QUICK_QUESTIONS.map((q, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSendMessage(q)}
-                disabled={loading}
-                className="whitespace-nowrap bg-[#eef6fb] hover:bg-[#0074b8] hover:text-white text-[#003b70] border border-[#dce5ee] text-[11px] font-bold px-2.5 py-1 rounded-xl transition-all cursor-pointer disabled:opacity-50 flex-shrink-0"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
           {/* Input Form */}
           <form
             onSubmit={e => {
@@ -338,7 +343,7 @@ export const FloatingChat: React.FC = () => {
             Tirar Dúvidas <Sparkles className="w-3 h-3 text-[#5bd5ff]" />
           </span>
           <span className="text-[10px] font-bold text-sky-200 leading-tight">
-            IA Unimar EAD 24/7
+            IA Unimar Rozinho EAD
           </span>
         </div>
       </button>

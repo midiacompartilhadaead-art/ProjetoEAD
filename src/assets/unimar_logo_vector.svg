@@ -1,0 +1,42 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 150' width='580' height='150'>
+  <defs>
+    <mask id='u-stripes-mask'>
+      <rect x='0' y='0' width='580' height='150' fill='white' />
+      <!-- Cutout transparent diagonal lines -->
+      <path d='M 0 76 L 68 -2 L 76 -2 L 0 86 Z' fill='black' />
+      <path d='M 0 96 L 85 -2 L 93 -2 L 0 106 Z' fill='black' />
+      <path d='M 0 116 L 102 -2 L 110 -2 L 0 126 Z' fill='black' />
+    </mask>
+  </defs>
+
+  <g fill='#0073E6'>
+    <!-- 4 Diagonal stripes extension on bottom-left -->
+    <g mask='url(#u-stripes-mask)'>
+      <path d='M 0 126 L 68 30 L 78 30 L 0 138 Z' />
+      <path d='M 12 126 L 80 30 L 90 30 L 12 138 Z' />
+      <path d='M 24 126 L 92 30 L 102 30 L 24 138 Z' />
+      <path d='M 36 126 L 104 30 L 114 30 L 36 138 Z' />
+      
+      <!-- U Main Body -->
+      <path d='M 38 10 L 75 10 L 75 62 C 75 80 88 90 105 90 C 122 90 135 80 135 62 L 135 10 L 163 10 L 163 64 C 163 97 138 116 105 116 C 72 116 38 97 38 64 Z' />
+    </g>
+
+    <!-- n -->
+    <path d='M 180 40 L 206 40 L 206 52 C 213 44 224 39 236 39 C 258 39 268 52 268 72 L 268 112 L 242 112 L 242 75 C 242 65 236 61 228 61 C 219 61 213 66 207 74 L 207 112 L 180 112 Z' />
+
+    <!-- ı (dotless i) -->
+    <rect x='282' y='40' width='26' height='72' rx='1' />
+
+    <!-- m -->
+    <path d='M 322 40 L 347 40 L 347 52 C 353 44 363 39 373 39 C 385 39 394 45 398 54 C 405 44 416 39 429 39 C 449 39 460 52 460 72 L 460 112 L 434 112 L 434 75 C 434 65 429 61 421 61 C 413 61 407 66 401 74 L 401 112 L 375 112 L 375 75 C 375 65 370 61 362 61 C 354 61 348 66 342 74 L 342 112 L 322 112 Z' />
+
+    <!-- a -->
+    <path d='M 526 40 L 552 40 L 552 112 L 528 112 L 528 101 C 521 109 510 114 498 114 C 476 114 462 99 462 77 C 462 55 478 39 502 39 C 512 39 521 42 526 48 Z M 526 68 C 522 62 515 59 506 59 C 495 59 488 66 488 76 C 488 85 495 92 506 92 C 515 92 522 88 526 82 Z' />
+
+    <!-- r -->
+    <path d='M 566 40 L 591 40 L 591 53 C 598 43 608 39 620 39 C 624 39 629 40 633 42 L 628 66 C 624 64 620 63 615 63 C 606 63 598 69 592 79 L 592 112 L 566 112 Z' />
+
+    <!-- UNIVERSIDADE DE MARÍLIA -->
+    <text x='310' y='142' text-anchor='middle' font-family='system-ui, -apple-system, sans-serif' font-weight='800' font-size='19.5' letter-spacing='4'>UNIVERSIDADE DE MARÍLIA</text>
+  </g>
+</svg>

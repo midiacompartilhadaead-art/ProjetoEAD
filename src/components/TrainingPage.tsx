@@ -10,33 +10,44 @@ import {
   Check, 
   AlertTriangle,
   Send,
+  ArrowUp,
   Building2,
   FileCheck,
   Megaphone,
   Sparkles
 } from 'lucide-react';
 
+/**
+ * Interface das propriedades recebidas pelo Guia de Mídia (TrainingPage)
+ */
 interface TrainingPageProps {
   onNavigate: (view: PageView) => void;
 }
 
+/**
+ * Componente TrainingPage - Exibe o Guia de Mídia Compartilhada, Calculadora de Verba, Regras de Reembolso e Modelos de Solicitação
+ */
 export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
-  // Calculadora State
+  // Estados da Calculadora de Verba de Mídia
   const [meta, setMeta] = useState<number>(100);
-  const CAC = 90;
-  const verbaTotal = meta * CAC;
+  const [cac, setCac] = useState<number>(90);
+  
+  // Fórmulas de cálculo de verba e compartilhamento 50/50 entre Polo e Unimar
+  const verbaTotal = meta * cac;
   const verbaUnimar = verbaTotal / 2;
   const verbaPolo = verbaTotal / 2;
 
-  // Copy Feedback State
+  // Estado para feedback de cópia de modelos de texto para a área de transferência
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
+  // Função para copiar texto para a área de transferência com indicação visual de sucesso
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(text);
     setTimeout(() => setCopiedText(null), 2000);
   };
 
+  // Formatação monetária em Reais (BRL)
   const formatBRL = (val: number) => {
     return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
@@ -44,27 +55,17 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-12">
       
-      {/* Top Header Title Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-        <div>
-          <span className="text-xs font-black text-[#00a9e8] uppercase tracking-widest block mb-1">
-            Módulo de Treinamento e Diretrizes
-          </span>
-          <h1 className="text-2xl sm:text-4xl font-black text-[#003b70] tracking-tight">
-            Manual de Mídia Compartilhada
-          </h1>
-        </div>
-        
-        <button
-          onClick={() => onNavigate('upload')}
-          className="flex items-center gap-2 bg-[#00a9e8] hover:bg-[#0092c8] text-white font-extrabold text-xs sm:text-sm px-5 py-3 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer"
-        >
-          <Send className="w-4 h-4" />
-          <span>Enviar Comprovantes de Mídia</span>
-        </button>
+      {/* Barra de Título Superior */}
+      <div className="pb-6 border-b border-slate-200">
+        <span className="text-xs font-black text-[#00a9e8] uppercase tracking-widest block mb-1">
+          Guia de Mídia e Diretrizes
+        </span>
+        <h1 className="text-2xl sm:text-4xl font-black text-[#003b70] tracking-tight">
+          Guia de Mídia Compartilhada
+        </h1>
       </div>
 
-      {/* Section 01: Objetivos */}
+      {/* Seção 01: Objetivos da Mídia Compartilhada */}
       <section className="space-y-6">
         <div className="max-w-3xl">
           <span className="text-xs font-extrabold text-[#0074b8] tracking-wider uppercase">
@@ -182,8 +183,8 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 mb-2">
             Como a verba é dividida?
           </h2>
-          <p className="text-slate-700 font-medium text-sm leading-relaxed">
-            A verba de mídia é calculada multiplicando a meta de alunos pelo CAC (R$ 90,00) com compartilhamento de <strong>50% Unimar / 50% Polo</strong>.
+          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">
+            A verba de mídia é calculada com base na meta de alunos, multiplicada pelo CAC (Custo de Aquisição por Aluno), atualmente fixado em R$ 90,00, valor definido pelos setores Comercial e EAD. Sobre o valor apurado, aplica-se o critério de compartilhamento de custos, sendo 50% de responsabilidade da Unimar e 50% de responsabilidade do Polo.
           </p>
         </div>
 
@@ -199,9 +200,25 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
                 Simule a verba do seu Polo
               </h3>
             </div>
-            <div className="bg-slate-800/90 px-4 py-2 rounded-2xl border border-slate-700/80 text-center">
-              <span className="text-xs font-medium text-slate-400 block uppercase">CAC Fixo por Aluno</span>
-              <strong className="text-xl font-bold text-white">R$ 90,00</strong>
+            <div className="bg-slate-800/90 px-4 py-2.5 rounded-2xl border border-slate-700/80 text-center space-y-1 hover:border-[#00a9e8]/50 transition-colors">
+              <label htmlFor="cacInput" className="text-xs font-extrabold text-slate-400 block uppercase tracking-wider cursor-pointer">
+                CAC por Aluno (R$)
+              </label>
+              <div className="flex items-center justify-center gap-1.5">
+                <span className="text-[#5bd5ff] font-black text-sm">R$</span>
+                <input
+                  id="cacInput"
+                  type="number"
+                  value={cac === 0 ? '' : cac}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    setCac(isNaN(val) ? 0 : val);
+                  }}
+                  className="w-24 bg-slate-900/90 text-center font-extrabold text-lg text-white outline-none border border-slate-700 focus:border-[#00a9e8] rounded-xl px-2 py-0.5 shadow-inner"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
             </div>
           </div>
 
@@ -241,7 +258,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
 
             {/* Multiply symbol */}
             <div className="text-center font-extrabold text-2xl text-[#5bd5ff]">
-              × R$ 90,00
+              × {formatBRL(cac)}
             </div>
 
             {/* Total Verba */}
@@ -493,13 +510,23 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ onNavigate }) => {
           <p className="text-xs sm:text-sm text-slate-300">Acesse o formulário de envio e anexe as NFs para auditoria.</p>
         </div>
 
-        <button
-          onClick={() => onNavigate('upload')}
-          className="flex items-center gap-2 bg-[#00a9e8] hover:bg-[#0092c8] text-white font-extrabold text-sm px-6 py-3.5 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer whitespace-nowrap"
-        >
-          <Send className="w-4 h-4" />
-          <span>Ir para Formulário de Envio</span>
-        </button>
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 text-white font-bold text-sm px-5 py-3.5 rounded-2xl border border-white/20 transition-all active:scale-95 cursor-pointer whitespace-nowrap w-full sm:w-auto"
+          >
+            <ArrowUp className="w-4 h-4" />
+            <span>Voltar ao Topo</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate('upload')}
+            className="flex items-center justify-center gap-2 bg-[#00a9e8] hover:bg-[#0092c8] text-white font-extrabold text-sm px-6 py-3.5 rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer whitespace-nowrap w-full sm:w-auto"
+          >
+            <Send className="w-4 h-4" />
+            <span>Ir para Formulário de Envio</span>
+          </button>
+        </div>
       </div>
 
     </div>
